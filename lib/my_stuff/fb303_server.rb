@@ -12,6 +12,7 @@ module MyStuff
       @status         = Fb_status::STARTING
       @status_details = ''
       @started_at     = Time.new.to_i
+      @counters       = Hash.new(0)
 
       start_fb303_server
     end
@@ -28,6 +29,8 @@ module MyStuff
     def getStatus; @status; end
     def getStatusDetails; @status_details; end
     def aliveSince; @started_at; end
+    def getCounters; @counters; end
+    def getCounter key; @counters[key]; end
     def getOption key; ''; end
     def getOptions; {}; end
     def getCpuProfile duration; ''; end
@@ -41,7 +44,12 @@ module MyStuff
       @status = Fb_status::STOPPED
     end
 
+    def increment_counter name
+      @counters[name] += 1
+    end
+
     protected
+
     def server_for processor
       raise NotImplementedError.new
     end
