@@ -27,5 +27,10 @@ version:       #{client.getVersion}
 status:        #{Fb_status::VALUE_MAP[client.getStatus]}
 details:       #{client.getStatusDetails}
 running since: #{Time.at(client.aliveSince)}
+counters:
 EOF
+  counters = client.getCounters
+  counters.keys.sort.each do |k|
+    puts "  #{k} => #{counters[k]}"
+  end
 end
