@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+# Copyright 2011-present Fred Emmott. All Rights Reserved.
+
+$LOAD_PATH.push File.dirname(__FILE__) + '/../lib'
+$LOAD_PATH.push File.dirname(__FILE__) + '/./gen-rb'
+require 'my_stuff/fb303_server'
+require 'echo_service'
+
+class EchoServer < MyStuff::Fb303Server
+  def initialize
+    super EchoService, 'Echo Service'
+  end
+
+  def echo string
+    puts string
+  end
+
+  def server_for processor
+    socket    = Thrift::ServerSocket.new 9090
+    transport = Thrift::FramedTransportFactory.new
+    protocol  = Thrift::BinaryProtocolFactory.new
+    Thrift::ThreadedServer.new(
+      processor,
+      socket,
+      transport,
+      protocol
+    )
+  end
+end
+
+EchoServer.new.run!

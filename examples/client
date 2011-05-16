@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+# Copyright 2011-present Fred Emmott. All Rights Reserved.
+
+$LOAD_PATH.push File.dirname(__FILE__) + '/./gen-rb'
+require 'echo_service'
+require 'optparse'
+
+mode = :echo
+OptionParser.new do |opts|
+  opts.banner += " [string]"
+  opts.on('--fb303') { mode = :fb303 }
+end.parse!
+
+socket = Thrift::Socket.new 'localhost', 9090
+transport = Thrift::FramedTransport.new(socket)
+protocol = Thrift::BinaryProtocol.new(transport)
+client = EchoService::Client.new(protocol)
+transport.open
+
+case mode
+when :echo
+  client.echo ARGV.join(' ')
+when :fb303
+  print <<EOF
+name:          #{client.getName}
+version:       #{client.getVersion}
+status:        #{Fb_status::VALUE_MAP[client.getStatus]}
+details:       #{client.getStatusDetails}
+running since: #{Time.at(client.aliveSince)}
+EOF
+end

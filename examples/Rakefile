@@ -1,0 +1,12 @@
+task :default => :thrift
+
+task :thrift => ['gen-rb/fb303_types.rb', 'gen-rb/echo_types.rb']
+[:fb303, :echo].each do |interface|
+  file "gen-rb/#{interface}_types.rb" => "#{interface}.thrift" do
+    sh "thrift --gen rb #{interface}.thrift"
+  end
+end
+
+task :clean do
+  FileUtils::rm_rf 'gen-rb/'
+end
