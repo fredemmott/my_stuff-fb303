@@ -6,12 +6,14 @@ require 'echo_service'
 require 'optparse'
 
 mode = :echo
+port = 9090
 OptionParser.new do |opts|
   opts.banner += " [string]"
   opts.on('--fb303') { mode = :fb303 }
+  opts.on('--port PORT', Integer) {|x| port = x}
 end.parse!
 
-socket = Thrift::Socket.new 'localhost', 9090
+socket = Thrift::Socket.new 'localhost', port
 transport = Thrift::FramedTransport.new(socket)
 protocol = Thrift::BinaryProtocol.new(transport)
 client = EchoService::Client.new(protocol)
