@@ -1,2 +1,3 @@
 *.swp
+.rvmrc
 examples/gen-rb/
