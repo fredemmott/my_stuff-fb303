@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name          = 'my_stuff-fb303'
-  s.version       = '0.0.2'
+  s.version       = '0.0.3'
   s.platform      = Gem::Platform::RUBY
   s.authors       = ['Fred Emmott']
   s.email         = ['mail@fredemmott.co.uk']
