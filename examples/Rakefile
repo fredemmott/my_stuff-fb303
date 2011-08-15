@@ -1,3 +1,5 @@
+# Copyright 2011-present Fred Emmott. See COPYING file.
+
 task :default => :thrift
 
 task :thrift => ['gen-rb/fb303_types.rb', 'gen-rb/echo_types.rb']

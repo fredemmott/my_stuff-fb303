@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+require 'rake'
 
 Gem::Specification.new do |s|
   s.name          = 'my_stuff-fb303'
@@ -10,10 +11,10 @@ Gem::Specification.new do |s|
   s.homepage      = 'https://github.com/fredemmott/my_stuff-fb303'
   s.summary       = %q{MyStuff.ws's Ruby fb303 implementation}
   s.description   = %q{Basic implementation of fb303 for Ruby services}
-  s.files         = [
-    'lib/my_stuff/fb303_server.rb',
-    'lib/my_stuff/fb303/proxy_handler.rb',
-    'lib/my_stuff/fb303/server.rb',
+  s.license       = 'ISC'
+  s.files         = FileList[
+    'COPYING',
     'README.rdoc',
-  ]
+    'lib/**/*.rb',
+  ].to_a
 end

@@ -1,4 +1,4 @@
-# Copyright 2011-present Fred Emmott. All Rights Reserved.
+# Copyright 2011-present Fred Emmott. See COPYING file.
 
 module MyStuff
   module Fb303

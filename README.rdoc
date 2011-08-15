@@ -8,7 +8,7 @@ See ./examples/server
 
 = What You Get
 
-Free implementation of:
+Implementations for:
 
 * getName
 * getVersion
@@ -22,3 +22,7 @@ Free implementation of:
   * success
   * exceptions (total)
   * exceptions (per exception)
+
+= Copying
+
+:include: COPYING
