@@ -33,4 +33,4 @@ or
 
 = Copying
 
-:include: COPYING
+See the COPYING file.
