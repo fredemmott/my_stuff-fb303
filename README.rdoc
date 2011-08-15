@@ -1,0 +1,24 @@
+= Overview
+
+This is a basic implementation of fb303 for Ruby.
+
+= Usage
+
+See ./examples/server
+
+= What You Get
+
+Free implementation of:
+
+* getName
+* getVersion
+* getStatus
+* getStatusDetails
+* aliveSince
+* getCounters
+* getCounter
+* shutdown
+* Automatic per-method counters for:
+  * success
+  * exceptions (total)
+  * exceptions (per exception)
