@@ -3,23 +3,29 @@
 
 $LOAD_PATH.push File.dirname(__FILE__) + '/../lib'
 $LOAD_PATH.push File.dirname(__FILE__) + '/./gen-rb'
-require 'my_stuff/fb303_server'
+require 'my_stuff/fb303/server'
 require 'echo_service'
 
-class EchoServer < MyStuff::Fb303Server
+class EchoHandler
+  def echo string
+    puts string
+  end
+end
+
+class EchoServer < MyStuff::Fb303::Server
   def initialize
     super EchoService, 'Echo Service'
   end
 
-  def echo string
-    puts string
+  def handler
+    @handler ||= EchoHandler.new
   end
 
   def server_for processor
     socket    = Thrift::ServerSocket.new 9090
     transport = Thrift::FramedTransportFactory.new
     protocol  = Thrift::BinaryProtocolFactory.new
-    Thrift::ThreadedServer.new(
+    Thrift::SimpleServer.new(
       processor,
       socket,
       transport,
