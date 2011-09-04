@@ -57,8 +57,12 @@ module MyStuff
       end
 
       def method_missing *args
+        unless self.getStatus == Fb_status::ALIVE
+          raise 'Handler unavailable in current status.'
+        end
+
         if self.handler != self
-          self.handler.send *args
+            self.handler.send *args
         else
           super *args
         end
