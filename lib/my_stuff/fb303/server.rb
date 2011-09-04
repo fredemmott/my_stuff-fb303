@@ -16,12 +16,17 @@ module MyStuff
         @started_at     = Time.new.to_i
         @counters       = Hash.new(0)
 
+        logger.info 'Starting fb303 service...'
         start_fb303_server
+        logger.info 'fb303 service running.'
+        logger.info 'Loading handler...'
+        handler
+        logger.info 'Handler loaded.'
       end
 
       def run!
-        handler # load it :)
         @status  = Fb_status::ALIVE
+        logger.info 'Alive, waiting on server thread.'
         @server_thread.join
       end
 
@@ -61,6 +66,15 @@ module MyStuff
 
       def handler
         self
+      end
+
+      def logger
+        if MyStuff.const_defined? :Logger
+          @logger ||= MyStuff::Logger.new
+        else
+          require 'logger'
+          @logger ||= Logger.new(STDOUT)
+        end
       end
 
       protected
