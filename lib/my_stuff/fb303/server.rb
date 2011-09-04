@@ -20,6 +20,7 @@ module MyStuff
       end
 
       def run!
+        handler # load it :)
         @status  = Fb_status::ALIVE
         @server_thread.join
       end
