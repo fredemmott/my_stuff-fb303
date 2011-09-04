@@ -17,7 +17,7 @@ module MyStuff
           @s.increment_counter "#{meth}.exception"
           @s.increment_counter "#{meth}.exception.#{e.class.name}"
 
-          if e.is_a? Thrift::ApplicationException
+          if e.is_a? Thrift::Exception
             # Presumably defined in the Thrift interface file
             level = :warn
           else
