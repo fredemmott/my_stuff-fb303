@@ -16,6 +16,23 @@ module MyStuff
         rescue => e
           @s.increment_counter "#{meth}.exception"
           @s.increment_counter "#{meth}.exception.#{e.class.name}"
+
+          if e.is_a? Thrift::ApplicationException
+            # Presumably defined in the Thrift interface file
+            level = :warn
+          else
+            # Definitely not :(
+            level = :error
+          end
+
+          begin
+            # MyStuff::Logger exception, allowing us to specify the
+            # backtrace.
+            @s.logger.raw_log e.backtrace, level, e
+          rescue NoMethoderror
+            @s.logger.send level, e
+          end
+
           raise
         end
       end
