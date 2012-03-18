@@ -7,6 +7,11 @@ require 'my_stuff/fb303/server'
 require 'logger'
 
 describe MyStuff::Fb303::Server do
+  before :each do
+    MyStuff::Fb303::Server.logger = Logger.new(nil)
+    EchoServer.logger = Logger.new(nil)
+  end
+
   it 'can be constructed' do
     lambda{
       EchoServer.new
@@ -20,25 +25,43 @@ describe MyStuff::Fb303::Server do
       @serverclass.send(:define_method, :initialize, lambda{})
     end
 
+    it 'returns the class logger if not overriden' do
+      @serverclass.new.logger.should be @serverclass.logger
+    end
+
+    it 'returns any overridden logger' do
+      instance = @serverclass.new
+      logger = Object.new
+      instance.logger = logger
+      instance.logger.should be logger
+    end
+  end
+
+  describe '.logger' do
+    before :each do
+      @server = MyStuff::Fb303::Server
+      @server.logger = nil
+    end
+
     it 'creates a standard logger' do
-      @serverclass.new.logger.should be_a ::Logger
+      @server.logger.should be_a ::Logger
     end
 
     it 'creates a MyStuff::Logger if available' do
       begin
         logger = Class.new(::Logger)
         logger.send(:define_method, :initialize, lambda{super STDOUT})
-        @serverclass.new.logger.should_not be_a logger
+        @server.logger.should_not be_a logger
         MyStuff.const_set(:Logger, logger)
-        @serverclass.new.logger.should be_a logger
+        @server.logger = nil
+        @server.logger.should be_a logger
       ensure
         MyStuff.send :remove_const, :Logger rescue nil
       end
     end
 
     it 'returns the same logger for multiple calls' do
-      server = @serverclass.new
-      server.logger.object_id.should == server.logger.object_id
+      @server.logger.object_id.should == @server.logger.object_id
     end
   end
 end

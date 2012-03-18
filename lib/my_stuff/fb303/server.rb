@@ -72,13 +72,21 @@ module MyStuff
         self
       end
 
+      attr_writer :logger
       def logger
-        return @logger if @logger
-        begin
-          @logger = MyStuff::Logger.new
-        rescue NameError
-          require 'logger'
-          @logger = ::Logger.new(STDOUT)
+        @logger || self.class.logger
+      end
+
+      class <<self
+        attr_writer :logger
+        def logger
+          return @logger if @logger
+          begin
+            @logger = MyStuff::Logger.new
+          rescue NameError
+            require 'logger'
+            @logger = ::Logger.new(STDOUT)
+          end
         end
       end
 
