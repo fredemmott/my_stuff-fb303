@@ -1,4 +1,7 @@
 *.swp
 .rvmrc
 *.gem
+Gemfile.lock
+coverage/
 examples/gen-rb/
+gen-rb/

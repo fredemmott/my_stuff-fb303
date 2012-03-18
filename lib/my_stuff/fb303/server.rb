@@ -73,11 +73,12 @@ module MyStuff
       end
 
       def logger
-        if MyStuff.const_defined? :Logger
-          @logger ||= MyStuff::Logger.new
-        else
+        return @logger if @logger
+        begin
+          @logger = MyStuff::Logger.new
+        rescue NameError
           require 'logger'
-          @logger ||= Logger.new(STDOUT)
+          @logger = ::Logger.new(STDOUT)
         end
       end
 

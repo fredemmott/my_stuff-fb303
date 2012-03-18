@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# Copyright 2011-present Fred Emmott. See COPYING file.
+# Copyright 2011-2012 Fred Emmott. See COPYING file.
 
 $LOAD_PATH.push File.dirname(__FILE__) + '/../lib'
 $LOAD_PATH.push File.dirname(__FILE__) + '/./gen-rb'
@@ -34,4 +34,6 @@ class EchoServer < MyStuff::Fb303::Server
   end
 end
 
-EchoServer.new.run!
+if File.expand_path($0) == File.expand_path(__FILE__)
+  EchoServer.new.run!
+end
