@@ -6,6 +6,11 @@ require 'my_stuff/fb303/server'
 
 require 'logger'
 
+class DummyServer < MyStuff::Fb303::Server
+  def initialize
+  end
+end
+
 describe MyStuff::Fb303::Server do
   before :each do
     MyStuff::Fb303::Server.logger = Logger.new(nil)
@@ -20,17 +25,14 @@ describe MyStuff::Fb303::Server do
 
   describe '#logger' do
     before :each do
-      # Server calls logger in the constructor, so, lets just stub it out :)
-      @serverclass = Class.new(MyStuff::Fb303::Server)
-      @serverclass.send(:define_method, :initialize, lambda{})
     end
 
     it 'returns the class logger if not overriden' do
-      @serverclass.new.logger.should be @serverclass.logger
+      DummyServer.new.logger.should be DummyServer.logger
     end
 
     it 'returns any overridden logger' do
-      instance = @serverclass.new
+      instance = DummyServer.new
       logger = Object.new
       instance.logger = logger
       instance.logger.should be logger
@@ -62,6 +64,38 @@ describe MyStuff::Fb303::Server do
 
     it 'returns the same logger for multiple calls' do
       @server.logger.object_id.should == @server.logger.object_id
+    end
+  end
+
+  describe '#shutdown' do
+    before :each do
+      @server = DummyServer.new
+    end
+
+    it 'should work even if theres no thread yet' do
+      lambda{
+        @server.instance_eval {
+          @fb303_thread = nil
+          shutdown
+        }
+      }.should_not raise_error
+    end
+
+    it 'should kill the thread if there is one' do
+      fake_thread = Object.new
+      fake_thread.should_receive :kill
+      lambda{
+        @server.instance_eval {
+          @fb303_thread = fake_thread
+          shutdown
+        }
+      }.should_not raise_error
+    end
+
+    it 'changes the status to STOPPED' do
+      @server.getStatus.should_not == Fb_status::STARTING
+      @server.shutdown
+      @server.getStatus.should == Fb_status::STOPPED
     end
   end
 end

@@ -48,7 +48,7 @@ module MyStuff
       def shutdown
         @status = Fb_status::STOPPING
         @status_details = 'Shutdown requested via fb303'
-        @fb303_thread.kill
+        @fb303_thread.kill if @fb303_thread
         @status = Fb_status::STOPPED
       end
 
