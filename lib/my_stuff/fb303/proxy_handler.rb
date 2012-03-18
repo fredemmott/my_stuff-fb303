@@ -29,7 +29,7 @@ module MyStuff
             # MyStuff::Logger exception, allowing us to specify the
             # backtrace.
             @s.logger.raw_log e.backtrace, level, e
-          rescue NoMethoderror
+          rescue NoMethodError
             @s.logger.send level, e
           end
 
